@@ -67,6 +67,12 @@ public class MySQLParserUtils {
 		return node.toString();
 	}
 
+	public static String addPressSufixToSqlNoCache(String sql, String pressSuffix) {
+		SQLSyntaxTreeNode node = parse(sql);
+		addPressSuffixToSql(node, pressSuffix);
+		return node.toString();
+	}
+
 	public static String placeHoldering(String sql) {
 		SQLSyntaxTreeNode node = parse(sql);
 		List<Object> hardCode = new ArrayList<>();
@@ -157,11 +163,33 @@ public class MySQLParserUtils {
 			MySQLParser parser = new MySQLParser(tokens);
 			parser.setErrorHandler(new MySQLParserErrorStrategy());
 			ParseTree tree = parser.stat();
-
 			return new MySQLVisitorImpl().visit(tree);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private static SQLSyntaxTreeNode addPressSuffixToSql(SQLSyntaxTreeNode node, String pressSuffix) {
+		if (node instanceof SelectNode) {
+			node = addPressSuffixToSqlForSelect(node, pressSuffix);
+		} else if (node instanceof UpdateNode) {
+			node = addPressSuffixToSqlForUpdate(node, pressSuffix);
+		} else if (node instanceof InsertNode) {
+			node = addPressSuffixToSqlForInsert(node, pressSuffix);
+		} else if (node instanceof DeleteNode) {
+			node = addPressSuffixToSqlForDelete(node, pressSuffix);
+		}
+		for (Field f : node.getClass().getDeclaredFields()) {
+			f.setAccessible(true);
+			try {
+				Object o = f.get(node);
+				if (o instanceof SQLSyntaxTreeNode)
+					addPressSuffixToSql((SQLSyntaxTreeNode) o, pressSuffix);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return node;
 	}
 
 	private static SQLSyntaxTreeNode addColumn(SQLSyntaxTreeNode node, String version) {
@@ -198,7 +226,8 @@ public class MySQLParserUtils {
 			WhereConditionNode wc = delete.getWhereCondition();
 
 			String left = alias == null ? CULUMN_NAME : alias + '.' + CULUMN_NAME;
-			ExpressionRelationalNode ern = new ExpressionRelationalNode(new ElementTextNode(left), new ElementTextNode(version), "<=");
+			ExpressionRelationalNode ern = new ExpressionRelationalNode(new ElementTextNode(left),
+					new ElementTextNode(version), "<=");
 			WhereConditionNode newWc = null;
 			if (wc == null) {
 				newWc = new WhereConditionOpNode(ern, null, null);
@@ -209,6 +238,19 @@ public class MySQLParserUtils {
 		}
 
 		return delete;
+	}
+
+	private static SQLSyntaxTreeNode addPressSuffixToSqlForDelete(SQLSyntaxTreeNode node, String pressSuffix) {
+		DeleteNode delete = (DeleteNode) node;
+		TableNameAndAliasNode tableNameAndAlias = delete.getTableNameAndAlias();
+		tableNameAndAlias.setName(tableNameAndAlias.getName() + pressSuffix);
+		return delete;
+	}
+
+	private static SQLSyntaxTreeNode addPressSuffixToSqlForInsert(SQLSyntaxTreeNode node, String pressSuffix) {
+		InsertNode insert = (InsertNode) node;
+		insert.setTableName(insert.getTableName() + pressSuffix);
+		return insert;
 	}
 
 	private static SQLSyntaxTreeNode processInsert(SQLSyntaxTreeNode node, String version) {
@@ -232,6 +274,21 @@ public class MySQLParserUtils {
 		return insert;
 	}
 
+	private static SQLSyntaxTreeNode addPressSuffixToSqlForUpdate(SQLSyntaxTreeNode node, String pressSuffix) {
+		if (node instanceof UpdateSignleTableNode) {
+			UpdateSignleTableNode update = (UpdateSignleTableNode) node;
+			TableNameAndAliasNode tableNameAndAlias = update.getTableNameAndAlias();
+			tableNameAndAlias.setName(tableNameAndAlias.getName() + pressSuffix);
+		} else {
+			UpdateMultipleTableNode update = (UpdateMultipleTableNode) node;
+			List<TableNameAndAliasNode> tabs = update.getTableNameAndAliases().all();
+			for (TableNameAndAliasNode tab : tabs) {
+				tab.setName(tab.getName() + pressSuffix);
+			}
+		}
+		return node;
+	}
+
 	private static SQLSyntaxTreeNode processUpdate(SQLSyntaxTreeNode node, String version) {
 		if (node instanceof UpdateSignleTableNode) {
 			UpdateSignleTableNode update = (UpdateSignleTableNode) node;
@@ -239,10 +296,12 @@ public class MySQLParserUtils {
 				String alias = update.getTableNameAndAlias().getAlias();
 				WhereConditionNode wc = update.getWhereCondition();
 				SetExprsNode setExprs = update.getSetExprs().getLastNode();
-				SetExprNode addSetNode = new SetExprNode(new ElementTextNode(CULUMN_NAME), new ElementTextNode(version));
+				SetExprNode addSetNode = new SetExprNode(new ElementTextNode(CULUMN_NAME),
+						new ElementTextNode(version));
 				setExprs.setSuffix(new SetExprsNode(addSetNode, null));
 
-				ExpressionRelationalNode ern = new ExpressionRelationalNode(new ElementTextNode(alias == null ? CULUMN_NAME : alias + '.' + CULUMN_NAME),
+				ExpressionRelationalNode ern = new ExpressionRelationalNode(
+						new ElementTextNode(alias == null ? CULUMN_NAME : alias + '.' + CULUMN_NAME),
 						new ElementTextNode(version), "<=");
 				WhereConditionNode newWc = null;
 				if (wc == null) {
@@ -269,7 +328,8 @@ public class MySQLParserUtils {
 					String cn = (alias == null ? tabName : alias) + '.' + CULUMN_NAME;
 
 					// process where
-					ExpressionRelationalNode ern = new ExpressionRelationalNode(new ElementTextNode(cn), new ElementTextNode(version), "<=");
+					ExpressionRelationalNode ern = new ExpressionRelationalNode(new ElementTextNode(cn),
+							new ElementTextNode(version), "<=");
 					versionCond = new WhereConditionOpNode(ern, "and", versionCond);
 
 					// process set
@@ -281,7 +341,7 @@ public class MySQLParserUtils {
 
 			if (versionCond != null) {
 				if (wc != null) {
-//					versionCond.appendCondition("and", new WhereConditionSubNode(wc));
+					// versionCond.appendCondition("and", new WhereConditionSubNode(wc));
 					versionCond = new WhereConditionSubNode(versionCond, "and", new WhereConditionSubNode(wc));
 				}
 
@@ -315,19 +375,24 @@ public class MySQLParserUtils {
 			if (TableConfig.isVersionTable(tabName)) {
 				String alias = tab.getAlias();
 				String cn = alias == null ? tabName : alias;
-				ExpressionNode ern = new ExpressionRelationalNode(new ElementTextNode(cn + '.' + CULUMN_NAME), new ElementTextNode(version), "<=");
+				ExpressionNode ern = new ExpressionRelationalNode(new ElementTextNode(cn + '.' + CULUMN_NAME),
+						new ElementTextNode(version), "<=");
 				ExpressionIsOrIsNotNode nullNode = null;
 				if (curTableJoinMod != null && curTableJoinMod.length() > 0) {
 					if (curTableJoinMod.startsWith("left")) {
-						nullNode = new ExpressionIsOrIsNotNode(new ElementTextNode(cn + '.' + CULUMN_NAME), false, "null");
+						nullNode = new ExpressionIsOrIsNotNode(new ElementTextNode(cn + '.' + CULUMN_NAME), false,
+								"null");
 					}
 				} else if (preTableJoinMod != null && preTableJoinMod.length() > 0) {
 					if (preTableJoinMod.startsWith("right")) {
-						nullNode = new ExpressionIsOrIsNotNode(new ElementTextNode(cn + '.' + CULUMN_NAME), false, "null");
+						nullNode = new ExpressionIsOrIsNotNode(new ElementTextNode(cn + '.' + CULUMN_NAME), false,
+								"null");
 					}
 				}
 				if (nullNode != null) {
-					versionCond = new WhereConditionSubNode(new WhereConditionOpNode(ern, "or", new WhereConditionOpNode(nullNode, null, null)), "and", versionCond);
+					versionCond = new WhereConditionSubNode(
+							new WhereConditionOpNode(ern, "or", new WhereConditionOpNode(nullNode, null, null)), "and",
+							versionCond);
 				} else {
 					versionCond = new WhereConditionOpNode(ern, "and", versionCond);
 				}
@@ -338,14 +403,29 @@ public class MySQLParserUtils {
 
 		if (versionCond != null) {
 			if (wc != null) {
-//				if (versionCond instanceof WhereConditionOpNode) {
-//					((WhereConditionOpNode) versionCond).appendCondition("and", new WhereConditionSubNode(wc));
-//				} else {
-					versionCond = new WhereConditionSubNode(versionCond, "and", new WhereConditionSubNode(wc));
-//				}
+				// if (versionCond instanceof WhereConditionOpNode) {
+				// ((WhereConditionOpNode) versionCond).appendCondition("and", new
+				// WhereConditionSubNode(wc));
+				// } else {
+				versionCond = new WhereConditionSubNode(versionCond, "and", new WhereConditionSubNode(wc));
+				// }
 			}
 
 			select.getSelectInner().getPrefix().setWhere(versionCond);
+		}
+		return select;
+	}
+
+	private static SQLSyntaxTreeNode addPressSuffixToSqlForSelect(SQLSyntaxTreeNode node, String pressSufix) {
+		SelectNode select = (SelectNode) node;
+		TablesNode tables = select.getSelectInner().getPrefix().getTables();
+		if (tables == null) {
+			return node;
+		}
+		List<TableRelNode.TableAndJoinMod> tabs = tables.getRealTables();
+		for (TableRelNode.TableAndJoinMod tabAndJoinMod : tabs) {
+			TableNameAndAliasNode tab = tabAndJoinMod.getTableNameAndAliasNode();
+			tab.setName(tab.getName() + pressSufix);
 		}
 		return select;
 	}
