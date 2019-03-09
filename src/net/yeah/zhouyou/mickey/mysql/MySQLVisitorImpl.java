@@ -87,28 +87,12 @@ public class MySQLVisitorImpl extends MySQLBaseVisitor<SQLSyntaxTreeNode> {
 
 	@Override
 	public SQLSyntaxTreeNode visitColumnNames(MySQLParser.ColumnNamesContext ctx) {
-		String name = ctx.name.getText();
-		ColumnNamesNode suffix = ctx.columnNamesSuffix() != null ? (ColumnNamesNode) visitColumnNamesSuffix(ctx.columnNamesSuffix()) : null;
-
-		return new ColumnNamesNode(name, suffix);
-	}
-
-	@Override
-	public SQLSyntaxTreeNode visitColumnNamesSuffix(MySQLParser.ColumnNamesSuffixContext ctx) {
-		return visitColumnNames(ctx.columnNames());
+		return new ColumnNamesNode(ctx.ID().stream().map(tn -> tn.getText()).collect(Collectors.toList()));
 	}
 
 	@Override
 	public SQLSyntaxTreeNode visitValueList(MySQLParser.ValueListContext ctx) {
-		ElementNode element = (ElementNode) this.visitElement(ctx.element());
-		ValueListNode suffix = ctx.valueListSuffix() != null ? (ValueListNode) visitValueListSuffix(ctx.valueListSuffix()) : null;
-
-		return new ValueListNode(element, suffix);
-	}
-
-	@Override
-	public SQLSyntaxTreeNode visitValueListSuffix(MySQLParser.ValueListSuffixContext ctx) {
-		return visitValueList(ctx.valueList());
+		return new ValueListNode(ctx.element().stream().map(ec -> (ElementNode) this.visitElement(ec)).collect(Collectors.toList()));
 	}
 
 	@Override
@@ -127,16 +111,8 @@ public class MySQLVisitorImpl extends MySQLBaseVisitor<SQLSyntaxTreeNode> {
 
 	@Override
 	public SQLSyntaxTreeNode visitTableNameAndAliases(MySQLParser.TableNameAndAliasesContext ctx) {
-		TableNameAndAliasNode tableNameAndAlias = (TableNameAndAliasNode) this.visitTableNameAndAlias(ctx.tableNameAndAlias());
-		TableNameAndAliasesNode suffix = ctx.tableNameAndAliasSuffix() != null
-				? (TableNameAndAliasesNode) this.visitTableNameAndAliasSuffix(ctx.tableNameAndAliasSuffix()) : null;
-
-		return new TableNameAndAliasesNode(tableNameAndAlias, suffix);
-	}
-
-	@Override
-	public SQLSyntaxTreeNode visitTableNameAndAliasSuffix(MySQLParser.TableNameAndAliasSuffixContext ctx) {
-		return this.visitTableNameAndAliases(ctx.tableNameAndAliases());
+		return new TableNameAndAliasesNode(ctx.tableNameAndAlias().stream()
+				.map(n -> (TableNameAndAliasNode) this.visitTableNameAndAlias(n)).collect(Collectors.toList()));
 	}
 
 	@Override
@@ -250,14 +226,7 @@ public class MySQLVisitorImpl extends MySQLBaseVisitor<SQLSyntaxTreeNode> {
 
 	@Override
 	public SQLSyntaxTreeNode visitElementList(MySQLParser.ElementListContext ctx) {
-		ElementNode element = (ElementNode) this.visitElement(ctx.element());
-		ElementListNode suffix = ctx.elementListSuffix() == null ? null : (ElementListNode) this.visitElementListSuffix(ctx.elementListSuffix());
-		return new ElementListNode(element, suffix);
-	}
-
-	@Override
-	public SQLSyntaxTreeNode visitElementListSuffix(MySQLParser.ElementListSuffixContext ctx) {
-		return this.visitElementList(ctx.elementList());
+		return new ElementListNode(ctx.element().stream().map(e -> (ElementNode) this.visitElement(e)).collect(Collectors.toList()));
 	}
 
 	@Override
@@ -300,14 +269,7 @@ public class MySQLVisitorImpl extends MySQLBaseVisitor<SQLSyntaxTreeNode> {
 
 	@Override
 	public SQLSyntaxTreeNode visitSetExprs(MySQLParser.SetExprsContext ctx) {
-		SetExprNode setExpr = (SetExprNode) this.visitSetExpr(ctx.setExpr());
-		SetExprsNode suffix = ctx.setExprSuffix() != null ? (SetExprsNode) this.visitSetExprSuffix(ctx.setExprSuffix()) : null;
-		return new SetExprsNode(setExpr, suffix);
-	}
-
-	@Override
-	public SQLSyntaxTreeNode visitSetExprSuffix(MySQLParser.SetExprSuffixContext ctx) {
-		return this.visitSetExprs(ctx.setExprs());
+		return new SetExprsNode(ctx.setExpr().stream().map(cse -> (SetExprNode) this.visitSetExpr(cse)).collect(Collectors.toList()));
 	}
 
 	@Override
@@ -358,13 +320,8 @@ public class MySQLVisitorImpl extends MySQLBaseVisitor<SQLSyntaxTreeNode> {
 		}
 		ElementNode element = ctx.element() == null ? null : (ElementNode) this.visitElement(ctx.element());
 		ExpressionRelationalNode exprRelational = ctx.exprRelational() == null ? null : (ExpressionRelationalNode) this.visitExprRelational(ctx.exprRelational());
-		ParamListNode suffix = ctx.paramSuffix() == null ? null : (ParamListNode) this.visitParamSuffix(ctx.paramSuffix());
+		ParamListNode suffix = ctx.paramList() == null ? null : (ParamListNode) this.visitParamList(ctx.paramList());
 		return new ParamListNode(element, exprRelational, suffix);
-	}
-
-	@Override
-	public SQLSyntaxTreeNode visitParamSuffix(MySQLParser.ParamSuffixContext ctx) {
-		return visitParamList(ctx.paramList());
 	}
 
 	@Override
@@ -436,38 +393,21 @@ public class MySQLVisitorImpl extends MySQLBaseVisitor<SQLSyntaxTreeNode> {
 	public SQLSyntaxTreeNode visitSelectExprs(MySQLParser.SelectExprsContext ctx) {
 		ElementNode element = (ElementNode) this.visitElement(ctx.element());
 		String alias = ctx.alias == null ? null : ctx.alias.getText();
-		SelectExprsNode suffix = ctx.selectExprsSuffix() != null ? (SelectExprsNode) this.visitSelectExprsSuffix(ctx.selectExprsSuffix()) : null;
+		SelectExprsNode suffix = ctx.selectExprs() != null ? (SelectExprsNode) this.visitSelectExprs(ctx.selectExprs()) : null;
 		return new SelectExprsNode(element, alias, suffix);
-	}
-
-	@Override
-	public SQLSyntaxTreeNode visitSelectExprsSuffix(MySQLParser.SelectExprsSuffixContext ctx) {
-		return this.visitSelectExprs(ctx.selectExprs());
 	}
 
 	@Override
 	public SQLSyntaxTreeNode visitGbobExprs(MySQLParser.GbobExprsContext ctx) {
 		ElementNode element = (ElementNode) this.visitElement(ctx.element());
 		String sc = ctx.sc == null ? null : ctx.sc.getText();
-		GbobExprsNode suffix = (ctx.gbobExprSuffix() != null) ? (GbobExprsNode) this.visitGbobExprSuffix(ctx.gbobExprSuffix()) : null;
+		GbobExprsNode suffix = (ctx.gbobExprs() != null) ? (GbobExprsNode) this.visitGbobExprs(ctx.gbobExprs()) : null;
 		return new GbobExprsNode(element, sc, suffix);
 	}
 
 	@Override
-	public SQLSyntaxTreeNode visitGbobExprSuffix(MySQLParser.GbobExprSuffixContext ctx) {
-		return this.visitGbobExprs(ctx.gbobExprs());
-	}
-
-	@Override
 	public SQLSyntaxTreeNode visitTables(MySQLParser.TablesContext ctx) {
-		TableRelNode tableRel = (TableRelNode) this.visitTableRel(ctx.tableRel());
-		TablesNode suffix = ctx.tableSuffix() != null ? (TablesNode) this.visitTableSuffix(ctx.tableSuffix()) : null;
-		return new TablesNode(tableRel, suffix);
-	}
-
-	@Override
-	public SQLSyntaxTreeNode visitTableSuffix(MySQLParser.TableSuffixContext ctx) {
-		return this.visitTables(ctx.tables());
+		return new TablesNode(ctx.tableRel().stream().map(trx -> (TableRelNode) this.visitTableRel(trx)).collect(Collectors.toList()));
 	}
 
 	@Override

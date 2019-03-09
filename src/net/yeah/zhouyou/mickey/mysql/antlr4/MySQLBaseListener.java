@@ -1,4 +1,4 @@
-// Generated from /Users/mickey/github/MySQLParser/src/net/yeah/zhouyou/mickey/mysql/antlr4/MySQL.g4 by ANTLR 4.5.3
+// Generated from src/net/yeah/zhouyou/mickey/mysql/antlr4/MySQL.g4 by ANTLR 4.5.3
 package net.yeah.zhouyou.mickey.mysql.antlr4;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -88,18 +88,6 @@ public class MySQLBaseListener implements MySQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterColumnNamesSuffix(MySQLParser.ColumnNamesSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitColumnNamesSuffix(MySQLParser.ColumnNamesSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterValueList(MySQLParser.ValueListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -107,18 +95,6 @@ public class MySQLBaseListener implements MySQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitValueList(MySQLParser.ValueListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterValueListSuffix(MySQLParser.ValueListSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitValueListSuffix(MySQLParser.ValueListSuffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -196,18 +172,6 @@ public class MySQLBaseListener implements MySQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSelectExprsSuffix(MySQLParser.SelectExprsSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSelectExprsSuffix(MySQLParser.SelectExprsSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterTables(MySQLParser.TablesContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -215,18 +179,6 @@ public class MySQLBaseListener implements MySQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTables(MySQLParser.TablesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTableSuffix(MySQLParser.TableSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTableSuffix(MySQLParser.TableSuffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -340,18 +292,6 @@ public class MySQLBaseListener implements MySQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGbobExprSuffix(MySQLParser.GbobExprSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGbobExprSuffix(MySQLParser.GbobExprSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterUpdateStat(MySQLParser.UpdateStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -400,18 +340,6 @@ public class MySQLBaseListener implements MySQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSetExprSuffix(MySQLParser.SetExprSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSetExprSuffix(MySQLParser.SetExprSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterSetExpr(MySQLParser.SetExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -455,18 +383,6 @@ public class MySQLBaseListener implements MySQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTableNameAndAliases(MySQLParser.TableNameAndAliasesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTableNameAndAliasSuffix(MySQLParser.TableNameAndAliasSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTableNameAndAliasSuffix(MySQLParser.TableNameAndAliasSuffixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -724,18 +640,6 @@ public class MySQLBaseListener implements MySQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterElementListSuffix(MySQLParser.ElementListSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElementListSuffix(MySQLParser.ElementListSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterElementOpEle(MySQLParser.ElementOpEleContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -827,18 +731,6 @@ public class MySQLBaseListener implements MySQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParamList(MySQLParser.ParamListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterParamSuffix(MySQLParser.ParamSuffixContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitParamSuffix(MySQLParser.ParamSuffixContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -17,7 +17,6 @@ import com.google.common.cache.CacheBuilder;
 
 import net.yeah.zhouyou.mickey.mysql.antlr4.MySQLLexer;
 import net.yeah.zhouyou.mickey.mysql.antlr4.MySQLParser;
-import net.yeah.zhouyou.mickey.mysql.tree.ColumnNamesNode;
 import net.yeah.zhouyou.mickey.mysql.tree.DeleteNode;
 import net.yeah.zhouyou.mickey.mysql.tree.ElementDateNode;
 import net.yeah.zhouyou.mickey.mysql.tree.ElementTextNode;
@@ -31,7 +30,6 @@ import net.yeah.zhouyou.mickey.mysql.tree.SelectExprsNode;
 import net.yeah.zhouyou.mickey.mysql.tree.SelectNode;
 import net.yeah.zhouyou.mickey.mysql.tree.SelectSuffixNode;
 import net.yeah.zhouyou.mickey.mysql.tree.SetExprNode;
-import net.yeah.zhouyou.mickey.mysql.tree.SetExprsNode;
 import net.yeah.zhouyou.mickey.mysql.tree.TableNameAndAliasNode;
 import net.yeah.zhouyou.mickey.mysql.tree.TableRelNode;
 import net.yeah.zhouyou.mickey.mysql.tree.TablesNode;
@@ -256,15 +254,12 @@ public class MySQLParserUtils {
 	private static SQLSyntaxTreeNode processInsert(SQLSyntaxTreeNode node, String version) {
 		InsertNode insert = (InsertNode) node;
 		if (TableConfig.isVersionTable(insert.getTableName())) {
-			// 如果columnNames为空则后无法添加属性，所以这里不对空做判断，直接报错。
-			ColumnNamesNode columnNames = insert.getColumnNames().getLastNode();
-			columnNames.setSuffix(new ColumnNamesNode(CULUMN_NAME, null));
+			insert.getColumnNames().addColumn(CULUMN_NAME);
 
 			ValueListNode valueName = insert.getValueNames();
 			SelectNode select = insert.getSelect();
 			if (valueName != null) {
-				valueName = valueName.getLastNode();
-				valueName.setSuffix(new ValueListNode(new ElementTextNode(version), null));
+				valueName.addElementNode(new ElementTextNode(version));
 			} else {
 				SelectExprsNode selectExprNode = select.getSelectInner().getPrefix().getSelectExprs().getLastNode();
 				selectExprNode.setSuffix(new SelectExprsNode(new ElementTextNode(version), null, null));
@@ -295,10 +290,9 @@ public class MySQLParserUtils {
 			if (TableConfig.isVersionTable(update.getTableNameAndAlias().getName())) {
 				String alias = update.getTableNameAndAlias().getAlias();
 				WhereConditionNode wc = update.getWhereCondition();
-				SetExprsNode setExprs = update.getSetExprs().getLastNode();
-				SetExprNode addSetNode = new SetExprNode(new ElementTextNode(CULUMN_NAME),
-						new ElementTextNode(version));
-				setExprs.setSuffix(new SetExprsNode(addSetNode, null));
+
+				SetExprNode addSetNode = new SetExprNode(new ElementTextNode(CULUMN_NAME), new ElementTextNode(version));
+				update.getSetExprs().addSetExpr(addSetNode);
 
 				ExpressionRelationalNode ern = new ExpressionRelationalNode(
 						new ElementTextNode(alias == null ? CULUMN_NAME : alias + '.' + CULUMN_NAME),
@@ -316,7 +310,6 @@ public class MySQLParserUtils {
 
 			List<TableNameAndAliasNode> tabs = update.getTableNameAndAliases().all();
 			WhereConditionNode wc = update.getWhereCondition();
-			SetExprsNode lastSetExprs = update.getSetExprs().getLastNode();
 
 			WhereConditionNode versionCond = null;
 
@@ -334,8 +327,7 @@ public class MySQLParserUtils {
 
 					// process set
 					SetExprNode addSetNode = new SetExprNode(new ElementTextNode(cn), new ElementTextNode(version));
-					lastSetExprs.setSuffix(new SetExprsNode(addSetNode, null));
-					lastSetExprs = lastSetExprs.getSuffix();
+					update.getSetExprs().addSetExpr(addSetNode);
 				}
 			}
 

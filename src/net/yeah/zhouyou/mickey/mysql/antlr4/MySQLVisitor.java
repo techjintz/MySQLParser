@@ -1,4 +1,4 @@
-// Generated from /Users/mickey/github/MySQLParser/src/net/yeah/zhouyou/mickey/mysql/antlr4/MySQL.g4 by ANTLR 4.5.3
+// Generated from src/net/yeah/zhouyou/mickey/mysql/antlr4/MySQL.g4 by ANTLR 4.5.3
 package net.yeah.zhouyou.mickey.mysql.antlr4;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -47,23 +47,11 @@ public interface MySQLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitColumnNames(MySQLParser.ColumnNamesContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MySQLParser#columnNamesSuffix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitColumnNamesSuffix(MySQLParser.ColumnNamesSuffixContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MySQLParser#valueList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitValueList(MySQLParser.ValueListContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MySQLParser#valueListSuffix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitValueListSuffix(MySQLParser.ValueListSuffixContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MySQLParser#selectStat}.
 	 * @param ctx the parse tree
@@ -101,23 +89,11 @@ public interface MySQLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSelectExprs(MySQLParser.SelectExprsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MySQLParser#selectExprsSuffix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSelectExprsSuffix(MySQLParser.SelectExprsSuffixContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MySQLParser#tables}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitTables(MySQLParser.TablesContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MySQLParser#tableSuffix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTableSuffix(MySQLParser.TableSuffixContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MySQLParser#tableRel}.
 	 * @param ctx the parse tree
@@ -173,12 +149,6 @@ public interface MySQLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGbobExprs(MySQLParser.GbobExprsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MySQLParser#gbobExprSuffix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGbobExprSuffix(MySQLParser.GbobExprSuffixContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MySQLParser#updateStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -203,12 +173,6 @@ public interface MySQLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSetExprs(MySQLParser.SetExprsContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MySQLParser#setExprSuffix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSetExprSuffix(MySQLParser.SetExprSuffixContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MySQLParser#setExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -232,12 +196,6 @@ public interface MySQLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTableNameAndAliases(MySQLParser.TableNameAndAliasesContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MySQLParser#tableNameAndAliasSuffix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTableNameAndAliasSuffix(MySQLParser.TableNameAndAliasSuffixContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MySQLParser#whereCondition}.
 	 * @param ctx the parse tree
@@ -365,12 +323,6 @@ public interface MySQLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitElementList(MySQLParser.ElementListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MySQLParser#elementListSuffix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElementListSuffix(MySQLParser.ElementListSuffixContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MySQLParser#elementOpEle}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -418,10 +370,4 @@ public interface MySQLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParamList(MySQLParser.ParamListContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MySQLParser#paramSuffix}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParamSuffix(MySQLParser.ParamSuffixContext ctx);
 }

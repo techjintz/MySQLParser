@@ -1,4 +1,4 @@
-// Generated from /Users/mickey/github/MySQLParser/src/net/yeah/zhouyou/mickey/mysql/antlr4/MySQL.g4 by ANTLR 4.5.3
+// Generated from src/net/yeah/zhouyou/mickey/mysql/antlr4/MySQL.g4 by ANTLR 4.5.3
 package net.yeah.zhouyou.mickey.mysql.antlr4;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -68,16 +68,6 @@ public interface MySQLListener extends ParseTreeListener {
 	 */
 	void exitColumnNames(MySQLParser.ColumnNamesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MySQLParser#columnNamesSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void enterColumnNamesSuffix(MySQLParser.ColumnNamesSuffixContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MySQLParser#columnNamesSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void exitColumnNamesSuffix(MySQLParser.ColumnNamesSuffixContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MySQLParser#valueList}.
 	 * @param ctx the parse tree
 	 */
@@ -87,16 +77,6 @@ public interface MySQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitValueList(MySQLParser.ValueListContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MySQLParser#valueListSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void enterValueListSuffix(MySQLParser.ValueListSuffixContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MySQLParser#valueListSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void exitValueListSuffix(MySQLParser.ValueListSuffixContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MySQLParser#selectStat}.
 	 * @param ctx the parse tree
@@ -158,16 +138,6 @@ public interface MySQLListener extends ParseTreeListener {
 	 */
 	void exitSelectExprs(MySQLParser.SelectExprsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MySQLParser#selectExprsSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void enterSelectExprsSuffix(MySQLParser.SelectExprsSuffixContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MySQLParser#selectExprsSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void exitSelectExprsSuffix(MySQLParser.SelectExprsSuffixContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MySQLParser#tables}.
 	 * @param ctx the parse tree
 	 */
@@ -177,16 +147,6 @@ public interface MySQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTables(MySQLParser.TablesContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MySQLParser#tableSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void enterTableSuffix(MySQLParser.TableSuffixContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MySQLParser#tableSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void exitTableSuffix(MySQLParser.TableSuffixContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MySQLParser#tableRel}.
 	 * @param ctx the parse tree
@@ -278,16 +238,6 @@ public interface MySQLListener extends ParseTreeListener {
 	 */
 	void exitGbobExprs(MySQLParser.GbobExprsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MySQLParser#gbobExprSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void enterGbobExprSuffix(MySQLParser.GbobExprSuffixContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MySQLParser#gbobExprSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void exitGbobExprSuffix(MySQLParser.GbobExprSuffixContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MySQLParser#updateStat}.
 	 * @param ctx the parse tree
 	 */
@@ -328,16 +278,6 @@ public interface MySQLListener extends ParseTreeListener {
 	 */
 	void exitSetExprs(MySQLParser.SetExprsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MySQLParser#setExprSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void enterSetExprSuffix(MySQLParser.SetExprSuffixContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MySQLParser#setExprSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void exitSetExprSuffix(MySQLParser.SetExprSuffixContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MySQLParser#setExpr}.
 	 * @param ctx the parse tree
 	 */
@@ -377,16 +317,6 @@ public interface MySQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTableNameAndAliases(MySQLParser.TableNameAndAliasesContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MySQLParser#tableNameAndAliasSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void enterTableNameAndAliasSuffix(MySQLParser.TableNameAndAliasSuffixContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MySQLParser#tableNameAndAliasSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void exitTableNameAndAliasSuffix(MySQLParser.TableNameAndAliasSuffixContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MySQLParser#whereCondition}.
 	 * @param ctx the parse tree
@@ -598,16 +528,6 @@ public interface MySQLListener extends ParseTreeListener {
 	 */
 	void exitElementList(MySQLParser.ElementListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MySQLParser#elementListSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void enterElementListSuffix(MySQLParser.ElementListSuffixContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MySQLParser#elementListSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void exitElementListSuffix(MySQLParser.ElementListSuffixContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MySQLParser#elementOpEle}.
 	 * @param ctx the parse tree
 	 */
@@ -687,14 +607,4 @@ public interface MySQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParamList(MySQLParser.ParamListContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MySQLParser#paramSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void enterParamSuffix(MySQLParser.ParamSuffixContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MySQLParser#paramSuffix}.
-	 * @param ctx the parse tree
-	 */
-	void exitParamSuffix(MySQLParser.ParamSuffixContext ctx);
 }

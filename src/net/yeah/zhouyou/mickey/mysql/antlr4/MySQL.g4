@@ -24,11 +24,8 @@ insertStat
 	: INSERT INTO? tableName=ID ('(' columnNames ')')? ((VALUES '(' valueList ')') | selectStat)
 	;
 
-columnNames       : name=ID columnNamesSuffix? ;
-columnNamesSuffix : ',' columnNames ;
-
-valueList       : element valueListSuffix? ;
-valueListSuffix : ',' valueList ;
+columnNames : (ID ',')* ID ;
+valueList   : (element ',')* element ;
 
 selectStat
 	: ('(' selectInner ')' | selectInner) selectUnionSuffix?
@@ -52,11 +49,8 @@ selectUnionSuffix
 	: UNION method=(ALL | DISTINCT)? ('(' selectStat ')' | selectStat) selectSuffix
 	;
 
-selectExprs       : element (AS? alias=ID)? selectExprsSuffix? ;
-selectExprsSuffix : ',' selectExprs ;
-
-tables      : tableRel tableSuffix? ;
-tableSuffix : ',' tables ;
+selectExprs : element (AS? alias=ID)? (',' selectExprs)? ;
+tables      : tableRel (',' tableRel)* ;
 
 tableRel
 	: tableFactor
@@ -77,8 +71,7 @@ tableJoinSuffix : tableJoinMod JOIN (tableNameAndAliases | '(' tableNameAndAlias
 tableJoinMod    : INNER | CROSS | LEFT OUTER? | RIGHT OUTER? ;
 joinCondition   : ON whereCondition | USING '(' columnNames ')' ;
 
-gbobExprs      : element sc=(ASC | DESC)? gbobExprSuffix? ;
-gbobExprSuffix : ',' gbobExprs ;
+gbobExprs : element sc=(ASC | DESC)? (',' gbobExprs)? ;
 
 updateStat
 	: updateSingleTable
@@ -88,17 +81,15 @@ updateStat
 updateSingleTable   : UPDATE tableNameAndAlias   SET setExprs (WHERE whereCondition)? (LIMIT rowCount=(INT|PLACEHOLDER))? ;
 updateMultipleTable	: UPDATE tableNameAndAliases SET setExprs (WHERE whereCondition)? ;
 
-setExprs      : setExpr setExprSuffix? ;
-setExprSuffix : ',' setExprs ;
+setExprs      : setExpr (',' setExpr)* ;
 setExpr       : left=element '=' (right=element | rightDefault=DEFAULT) ;
 
 deleteStat
 	: DELETE FROM tableNameAndAlias (WHERE whereCondition)? (LIMIT rowCount=(INT|PLACEHOLDER))?
 	;
 
-tableNameAndAlias       : name=ID (AS? alias=ID)? ;
-tableNameAndAliases     : tableNameAndAlias tableNameAndAliasSuffix? ;
-tableNameAndAliasSuffix : ',' tableNameAndAliases ;
+tableNameAndAlias   : name=ID (AS? alias=ID)? ;
+tableNameAndAliases : tableNameAndAlias (',' tableNameAndAlias)* ;
 
 whereCondition
 	: whereCondSub
@@ -151,8 +142,7 @@ elementDate        : dt=(DATE | TIME | TIMESTAMP) STRING ;
 elementSubQuery    : sqWith=(ANY | SOME | ALL)? '(' selectStat ')' ;
 elementWapperBkt   : '(' element ')' ;
 elementListFactor  : '(' elementList ')' ;
-elementList        : element elementListSuffix? ;
-elementListSuffix  : ',' elementList ;
+elementList        : element (',' element)* ;
 elementOpEle       : elementOpFactory elementOpEleSuffix? ;
 elementOpEleSuffix : op=('|' | '&' | '<<' | '>>' | '+' | '-' | '*' | DIV | MOD | '^' | AS)? elementOpEle ;
 // 上面这一行中的op为可选的原因是加号和减号会被合并后面的数字中，这并不是我希望的，但贪婪匹配会有这样的效果，所以这里需要在visitor中做特殊处理。
@@ -162,8 +152,7 @@ elementWithPrefix  : prefix=BINARY elementOpFactory ;
 elementRow         : ROW '(' paramList ')' ;
 
 funCall     : funName=ID '(' paramList? ')' ;
-paramList   : (element | exprRelational) paramSuffix? ;
-paramSuffix : ',' paramList ;
+paramList   : (element | exprRelational) (',' paramList)? ;
 
 // ******* Lexer *******
 
